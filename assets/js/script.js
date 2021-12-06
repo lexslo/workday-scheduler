@@ -3,16 +3,15 @@
 // THEN the current day is displayed at the top of the calendar
 // WHEN I scroll down
 // THEN I am presented with time blocks for standard business hours
-
-// WHEN I view the time blocks for that day
-// THEN each time block is color-coded to indicate whether it is in the past, present, or future
-
 // WHEN I click into a time block
 // THEN I can enter an event
 // WHEN I click the save button for that time block
 // THEN the text for that event is saved in local storage
 // WHEN I refresh the page
 // THEN the saved events persist
+// WHEN I view the time blocks for that day
+// THEN each time block is color-coded to indicate whether it is in the past, present, or future
+
 
 var timeDisplayEl = document.getElementById("currentDay");
 
@@ -22,28 +21,28 @@ timeDisplayEl.textContent = today;
 // object to hold time and task text for local storage
 var scheduleObj = {};
 
-// $(".time-block").on("click","textarea", function() {
+// color-code time-blocks to indicate whether it is in the past, present, or future
+function colorCode () {
 
-//     var text = $(this).val();
-//     console.log(text);
+    console.log("hour checked, color coded");
 
-// });
+    var currentTime = moment().format("H");
 
-// // editable field was un-focused
-// $(".time-block").on("blur", "textarea", function() {
-//     // get current value of textarea
-//     var text = $(this).val();
-  
-//     // get which hour was clicked
-//     var time = $(this)
-//       .closest(".time-block")
-//       .attr("id")
-//       .replace("hour", "");
+    $(".time-block").each( function(i) {
+        var hour = $(this).attr("id").replace("hour", "");
+        hour = parseInt(hour);
 
-//     console.log(text);
-//     console.log(time);
-
-// });
+        if (hour < currentTime) {
+            $(this).addClass("past");
+        } 
+        else if (hour > currentTime) {
+            $(this).addClass("future");
+        } 
+        else {
+            $(this).addClass("present");
+        }
+    });
+}
 
 // get time and text when save button is clicked, set to local storage
 $(".saveBtn").on("click", function () {
@@ -58,7 +57,7 @@ $(".saveBtn").on("click", function () {
 });
 
 function loadEvents() {
-    console.log("load events function");
+
     scheduleObj = JSON.parse(localStorage.getItem("event")) || {};
 
     for (var time in scheduleObj) {
@@ -68,4 +67,12 @@ function loadEvents() {
     }
 }
 
+// color code time blocks every 15 minutes
+setInterval(function () {
+    colorCode();
+  }, (60000 * 15));
+
+// check hours when page loads
+colorCode();
+// load saved task events
 loadEvents();
