@@ -6,6 +6,7 @@ body {
 
 textarea{
   background: transparent;
+  background-color: lightgrey;
   border: none;
   resize: none;
   color: #000000;
