@@ -24,8 +24,6 @@ var scheduleObj = {};
 // color-code time-blocks to indicate whether it is in the past, present, or future
 function colorCode () {
 
-    console.log("hour checked, color coded");
-
     var currentTime = moment().format("H");
 
     $(".time-block").each( function(i) {
